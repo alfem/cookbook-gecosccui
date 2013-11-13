@@ -17,20 +17,28 @@ package_version = node['gecoscc-ui']['backend']['version']
 virtualenv_prefix = node['gecoscc-ui']['backend']['virtual_prefix']
 virtualenv_path = virtualenv_prefix + package_version
 
+nginx_version = '1.4.3'
+nginx_prefix = virtualenv_path 
+nginx_sbin_path = virtualenv_path + '/bin/nginx'
+nginx_conf = virtualenv_path + '/nginx/'
+nginx_flags = %W[
+                --prefix=#{nginx_prefix}
+                --conf-path=#{nginx_conf}/nginx.conf
+                --sbin-path=#{nginx_sbin_path}
+              ]
 
-node.override['nginx']['source']['url'] = 'http://nginx.org/download/nginx-1.4.3.tar.gz'
-node.override['nginx']['source']['version'] = '1.4.3'
-node.override['nginx']['version'] = '1.4.3'
-node.override['nginx']['dir'] = '/opt/nginx/etc/'
-node.override['nginx']['prefix'] = '/opt/nginx/'
-node.override['nginx']['install_method'] = 'source'
+
+node.set['nginx']['source']['url'] = "http://nginx.org/download/nginx-#{nginx_version}.tar.gz"
+node.set['nginx']['source']['version'] = nginx_version
+node.set['nginx']['source']['prefix'] = nginx_prefix
+node.set['nginx']['source']['sbin_path'] = nginx_sbin_path
+node.set['nginx']['version'] = nginx_version
+node.set['nginx']['dir'] = nginx_conf
+node.set['nginx']['prefix'] = '/opt/nginx/'
+node.set['nginx']['install_method'] = 'source'
 # node.default['nginx']['default_site_enabled'] = 
-node.override['nginx']['source']['default_configure_flags'] = %W[
-                                                          --prefix=#{node['nginx']['source']['prefix']}
-                                                          --conf-path=#{node['nginx']['dir']}/nginx.conf
-                                                          --sbin-path=#{node['nginx']['source']['sbin_path']}
-                                                        ]
-
+node.force_override['nginx']['source']['default_configure_flags'] = nginx_flags
+node.force_override['nginx']['source']['configure_flags'] = nginx_flags
 
 node.default['nginx']['init_style'] = 'init'
 
@@ -49,14 +57,6 @@ package "mongo-10gen-server" do
 end
 
 package "mongo-10gen" do
-    action :install
-end
-
-package "openssl" do
-    action :install
-end
-
-package "openssl-devel" do
     action :install
 end
 
