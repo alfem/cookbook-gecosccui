@@ -5,16 +5,17 @@ This is the recipe to deploy the gecoscc ui
 
 Requirements
 ------------
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
+
+This cookbook was made to run in Centos 6.3 or newer.
 
 
-e.g.
 #### packages
-- `toaster` - gecoscc-ui needs toaster to brown your bagel.
+
+The recipe will install all the rpm required packages
+
 
 Attributes
 ----------
-TODO: List you cookbook attributes here.
 
 e.g.
 #### gecoscc-ui::default
@@ -26,20 +27,31 @@ e.g.
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['gecosccui']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
+    <td><tt>default['gecoscc-ui']['backend']['package']</tt></td>
+    <td>String/td>
+    <td>The package name or a URL to the package</td>
+    <td><tt>https://github.com/gecos-team/gecoscc-ui/archive/dummy.tar.gz</tt></td>
+  </tr>
+  <tr>
+    <td><tt>default['gecoscc-ui']['backend']['version']</tt></td>
+    <td>String/td>
+    <td>The package version name</td>
+    <td><tt>dummy</tt></td>
+  </tr>
+  <tr>
+    <td><tt>default['gecoscc-ui']['backend']['virtual_prefix']</tt></td>
+    <td>String/td>
+    <td>The virtualenv prefix, the version variable is append</td>
+    <td><tt>/opt/gecosccui-</tt></td>
   </tr>
 </table>
 
 Usage
 -----
 #### gecoscc-ui::default
-TODO: Write usage instructions for each cookbook.
 
 e.g.
-Just include `gecoscc-ui` in your node's `run_list`:
+Just include `gecosccui` in your node's `run_list`:
 
 ```json
 {
@@ -58,10 +70,15 @@ e.g.
 1. Fork the repository on Github
 2. Create a named feature branch (like `add_component_x`)
 3. Write your change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
+4. Test your changes in a clear Centos 6.3 system (only with ssh package selected during the OS installation)(
 6. Submit a Pull Request using Github
 
 License and Authors
 -------------------
-Authors: TODO: List authors
+
+Copyright © 2013 Junta de Andalucia < http://www.juntadeandalucia.es >
+Licensed under the EUPL V.1.1
+
+The license text is available at http://www.osor.eu/eupl and the attached PDF
+
+Authors: Antonio Perez-Aranda Alcaide <aperezaranda@yaco.es>
