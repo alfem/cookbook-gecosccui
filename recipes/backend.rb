@@ -63,14 +63,17 @@ package "mongo-10gen" do
     action :install
 end
 
-python_virtualenv virtualenv_path do
-    action :create
-end
-
 service "mongod" do
     action [:enable, :start]
 end
 
+# Create the gecoscc virtualenv
+python_virtualenv virtualenv_path do
+    action :create
+end
+
+
+# The gevent required version by pyramid_sockjs is not stable and don't exist in pypi
 python_pip "https://github.com/surfly/gevent/releases/download/1.0rc3/gevent-1.0rc3.tar.gz" do
     virtualenv virtualenv_path
 end
@@ -95,7 +98,7 @@ service_factory "supervisord" do
     exec_args ' -n -c ' + virtualenv_path + '/supervisord.conf'
     run_user "root"
     run_group "root"
-    action [:create, :enable, :start]
+    action [:create, :enable]
 end
 
 service "nginx" do
@@ -111,7 +114,7 @@ end
 template "gecoscc-nginx" do
     source "gecoscc.nginx.conf.erb"
     path node['nginx']['dir'] + '/sites-available/gecoscc.conf'
-    notifies :restart, 'service[nginx]', :delayed
+    notifies :reload, 'service[nginx]', :delayed
     variables({
         :workers_number => Array(0..workers-1),
         :hostname => node['hostname']
@@ -125,7 +128,12 @@ template "gecoscc-supervisord" do
         :virtualenv_path => virtualenv_path,
         :workers => workers,
     })
-    notifies :restart, 'service[supervisord]', :delayed
+    notifies :restart, 'service[supervisord]'
+end
+
+nginx_site "gecoscc.conf" do
+    action :enable
+    notifies :reload, 'service[nginx]', :delayed
 end
 
 
