@@ -8,6 +8,15 @@ Requirements
 
 This cookbook was made to run in Centos 6.3 or newer.
 
+This cookbook require this other cookbooks from opscode:
+
+- python
+- build-essential
+- nginx
+- service_factory
+
+Maybe you want to use librarian-chef or berkshelf
+
 
 #### packages
 
@@ -42,6 +51,18 @@ e.g.
     <td><tt>default['gecoscc-ui']['backend']['virtual_prefix']</tt></td>
     <td>String</td>
     <td>The virtualenv prefix, the version variable is append</td>
+    <td><tt>/opt/gecosccui-</tt></td>
+  </tr>
+  <tr>
+    <td><tt>default['gecoscc-ui']['backend']['workers']</tt></td>
+    <td>String</td>
+    <td>The python workers for the pyramid application</td>
+    <td><tt>2</tt></td>
+  </tr>
+  <tr>
+    <td><tt>default['gecoscc-ui']['backend']['firewall']</tt></td>
+    <td>String</td>
+    <td>The system firewall system. Now, the only firewall iptables wrapper supported is lokkit</td>
     <td><tt>/opt/gecosccui-</tt></td>
   </tr>
 </table>
