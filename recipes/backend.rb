@@ -16,11 +16,13 @@ package_name = node['gecoscc-ui']['backend']['package']
 package_version = node['gecoscc-ui']['backend']['version']
 virtualenv_prefix = node['gecoscc-ui']['backend']['virtual_prefix']
 virtualenv_path = virtualenv_prefix + package_version
+workers = node['gecoscc-ui']['backend']['workers']
+firewall_type =  node['gecoscc-ui']['backend']['firewall']
 
 nginx_version = '1.4.3'
-nginx_prefix = virtualenv_path 
-nginx_sbin_path = virtualenv_path + '/bin/nginx'
-nginx_conf = virtualenv_path + '/nginx/'
+nginx_prefix = '/opt/nginx'
+nginx_sbin_path = nginx_prefix + '/bin/nginx'
+nginx_conf = nginx_prefix + '/etc'
 nginx_flags = %W[
                 --prefix=#{nginx_prefix}
                 --conf-path=#{nginx_conf}/nginx.conf
@@ -34,9 +36,10 @@ node.set['nginx']['source']['prefix'] = nginx_prefix
 node.set['nginx']['source']['sbin_path'] = nginx_sbin_path
 node.set['nginx']['version'] = nginx_version
 node.set['nginx']['dir'] = nginx_conf
-node.set['nginx']['prefix'] = '/opt/nginx/'
+node.set['nginx']['log_dir'] = nginx_prefix + '/logs'
+node.set['nginx']['prefix'] = nginx_prefix
 node.set['nginx']['install_method'] = 'source'
-# node.default['nginx']['default_site_enabled'] = 
+node.default['nginx']['default_site_enabled'] = false
 node.force_override['nginx']['source']['default_configure_flags'] = nginx_flags
 node.force_override['nginx']['source']['configure_flags'] = nginx_flags
 
@@ -64,6 +67,10 @@ python_virtualenv virtualenv_path do
     action :create
 end
 
+service "mongod" do
+    action [:enable, :start]
+end
+
 python_pip "https://github.com/surfly/gevent/releases/download/1.0rc3/gevent-1.0rc3.tar.gz" do
     virtualenv virtualenv_path
 end
@@ -71,24 +78,63 @@ end
 python_pip package_name do
     virtualenv virtualenv_path
     version package_version
+    notifies :restart, 'service[supervisord]', :delayed
 end
 
-python_pip 'supervisord' do
+python_pip 'supervisor' do
     virtualenv virtualenv_path
 end
 
+directory virtualenv_path + '/supervisor'
+directory virtualenv_path + '/supervisor/log'
+directory virtualenv_path + '/supervisor/run'
+
+service_factory "supervisord" do
+    service_desc "GecosCC UI Supervisor"
+    exec virtualenv_path + '/bin/supervisord'
+    exec_args ' -n -c ' + virtualenv_path + '/supervisord.conf'
+    run_user "root"
+    run_group "root"
+    action [:create, :enable, :start]
+end
+
+service "nginx" do
+    action :enable
+end
 
 template "gecoscc-ini" do
-    source "gecoscc.ini"
+    source "gecoscc.ini.erb"
     path virtualenv_path + '/gecoscc.ini'
+    notifies :restart, 'service[supervisord]', :delayed
 end
 
 template "gecoscc-nginx" do
-    source "gecoscc.nginx.conf"
-    path node['nginx']['dir'] + '/conf.d/gecoscc.conf'
+    source "gecoscc.nginx.conf.erb"
+    path node['nginx']['dir'] + '/sites-available/gecoscc.conf'
+    notifies :restart, 'service[nginx]', :delayed
+    variables({
+        :workers_number => Array(0..workers-1),
+        :hostname => node['hostname']
+    })
 end
 
 template "gecoscc-supervisord" do
-    source "gecoscc.supervisord.conf"
+    source "gecoscc.supervisord.conf.erb"
     path virtualenv_path + '/supervisord.conf'
+    variables({
+        :virtualenv_path => virtualenv_path,
+        :workers => workers,
+    })
+    notifies :restart, 'service[supervisord]', :delayed
+end
+
+
+bash "lokkit" do
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+    lokkit -s http
+    lokkit -s https
+  EOH
+  only_if { firewall_type == 'lokkit' }
 end

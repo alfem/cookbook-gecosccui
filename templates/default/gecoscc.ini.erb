@@ -35,8 +35,8 @@ pipeline =
 [server:main]
 use = egg:gunicorn#main
 host = 0.0.0.0
-port = 8000
-workers = 2
+port = %(http_port)s
+workers = 1
 worker_class = gevent
 
 # Begin logging configuration

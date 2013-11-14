@@ -28,19 +28,19 @@ e.g.
   </tr>
   <tr>
     <td><tt>default['gecoscc-ui']['backend']['package']</tt></td>
-    <td>String/td>
+    <td>String</td>
     <td>The package name or a URL to the package</td>
     <td><tt>https://github.com/gecos-team/gecoscc-ui/archive/dummy.tar.gz</tt></td>
   </tr>
   <tr>
     <td><tt>default['gecoscc-ui']['backend']['version']</tt></td>
-    <td>String/td>
+    <td>String</td>
     <td>The package version name</td>
     <td><tt>dummy</tt></td>
   </tr>
   <tr>
     <td><tt>default['gecoscc-ui']['backend']['virtual_prefix']</tt></td>
-    <td>String/td>
+    <td>String</td>
     <td>The virtualenv prefix, the version variable is append</td>
     <td><tt>/opt/gecosccui-</tt></td>
   </tr>
