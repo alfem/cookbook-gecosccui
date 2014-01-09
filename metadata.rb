@@ -4,7 +4,7 @@ maintainer_email 'ant30tx@gmail.com'
 license          'EUPL V 1.1 http://www.osor.eu/eupl'
 description      'Installs/Configures gecoscc-ui'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '0.1.0'
+version          '0.2'
 
 depends 'python'
 depends 'build-essential'
