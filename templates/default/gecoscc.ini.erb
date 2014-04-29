@@ -47,7 +47,7 @@ setup_console_handler = False
 [server:main]
 use = egg:gunicorn#main
 host = 0.0.0.0
-port = 6543
+port = %(http_port)s
 workers = 2
 worker_class = gevent
 timeout = 600
