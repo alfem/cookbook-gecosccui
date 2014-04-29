@@ -49,11 +49,18 @@ include_recipe "nginx::source"
 
 
 # Add mongodb repository
-yum_repository "10gen" do
-    description "10gen RPM Repository"
-    url "http://downloads-distro.mongodb.org/repo/redhat/os/#{node['kernel']['machine']  =~ /x86_64/ ? 'x86_64' : 'i686'}"
-    action :add
+yum_repository 'mongodb' do
+    description 'mongodb RPM Repository'
+    baseurl "http://downloads-distro.mongodb.org/repo/redhat/os/#{node['kernel']['machine']  =~ /x86_64/ ? 'x86_64' : 'i686'}"
+    action :create
+    gpgcheck false
+    enabled true
 end
+#yum_repository "10gen" do
+#    description "10gen RPM Repository"
+#    url "http://downloads-distro.mongodb.org/repo/redhat/os/#{node['kernel']['machine']  =~ /x86_64/ ? 'x86_64' : 'i686'}"
+#    action :add
+#end
 
 #package "mongo-10gen-server" do
 #    action :install
