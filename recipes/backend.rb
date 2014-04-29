@@ -55,11 +55,15 @@ yum_repository "10gen" do
     action :add
 end
 
-package "mongo-10gen-server" do
-    action :install
-end
+#package "mongo-10gen-server" do
+#    action :install
+#end
 
-package "mongo-10gen" do
+#package "mongo-10gen" do
+#    action :install
+#end
+
+package "mongodb-org" do
     action :install
 end
 
