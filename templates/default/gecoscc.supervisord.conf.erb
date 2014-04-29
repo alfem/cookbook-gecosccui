@@ -19,7 +19,7 @@ serverurl=unix://<%= @virtualenv_path %>/supervisor/run/supervisor.sock
 
 [program:gecosccui]
 autorestart=true
-command=<%= @virtualenv_path %>/bin/pserve <%= @virtualenv_path %>/gecoscc.ini http_port=80%(process_num)02d
+command=<%= @virtualenv_path %>/bin/pserve <%= @virtualenv_path %>/gecoscc.ini http_port=801%(process_num)01d
 process_name=%(program_name)s-%(process_num)01d
 numprocs=<%= @workers %>
 numprocs_start=0
