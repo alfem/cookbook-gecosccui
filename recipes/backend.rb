@@ -73,8 +73,8 @@ python_virtualenv virtualenv_path do
 end
 
 
-# The gevent required version by pyramid_sockjs is not stable and don't exist in pypi
-python_pip "https://github.com/surfly/gevent/releases/download/1.0rc3/gevent-1.0rc3.tar.gz" do
+# The gevent required version by pyramid_sockjs
+python_pip "https://pypi.python.org/packages/source/g/gevent/gevent-1.0.tar.gz" do
     virtualenv virtualenv_path
 end
 
