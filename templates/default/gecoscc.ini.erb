@@ -10,7 +10,7 @@ pyramid.default_locale_name = en
 
 jinja2.directories = gecoscc:templates
 
-mongo_uri = mongodb://localhost:27017/gecoscc
+mongo_uri = <%= node['gecoscc-ui']['mongodb']['url'] %>
 
 #session.type = memory
 session.type = file
@@ -31,7 +31,7 @@ session.cookie_on_exception = true
 ##     "taskmeta_collection": "celery_taskmeta",
 ##     }
 
-chef.url = https://localhost:449/
+chef.url = <%= node['gecoscc-ui']['chef-server']['url'] %>
 chef.cookbook_name = gecos_ws_mgmt
 
 firstboot_api.version = 0.2.0
