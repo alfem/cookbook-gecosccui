@@ -9,8 +9,8 @@
 # http://www.osor.eu/eupl
 #
 
-default['gecoscc-ui']['backend']['package'] = 'https://github.com/gecos-team/gecoscc-ui/archive/0.5.0.tar.gz'
-default['gecoscc-ui']['backend']['version'] = '0.5.0'
+default['gecoscc-ui']['backend']['version'] = '0.5.1'
+default['gecoscc-ui']['backend']['package'] = 'https://github.com/gecos-team/gecoscc-ui/archive/' << default['gecoscc-ui']['backend']['version'] << '.tar.gz'
 default['gecoscc-ui']['backend']['virtual_prefix'] = '/opt/gecosccui-'
 default['gecoscc-ui']['backend']['workers'] = 2
 default['gecoscc-ui']['backend']['firewall'] = 'lokkit'
