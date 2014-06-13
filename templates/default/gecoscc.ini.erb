@@ -20,6 +20,13 @@ session.key = session
 session.secret = 12341234
 session.cookie_on_exception = true
 
+chef.url = <%= node['gecoscc-ui']['chef-server']['url'] %>
+chef.cookbook_name = gecos_ws_mgmt
+
+firstboot_api.version = 0.2.0
+firstboot_api.organization_name = Organization name
+firstboot_api.media = %(here)s/../gecoscc/media/users
+
 ## Change this if you dont want to use mongo
 ## BROKER_URL = mongodb://localhost:27017/gecoscc
 ## CELERY_RESULT_BACKEND = mongodb
@@ -30,13 +37,7 @@ session.cookie_on_exception = true
 ##     "database": "gecoscc",
 ##     "taskmeta_collection": "celery_taskmeta",
 ##     }
-
-chef.url = <%= node['gecoscc-ui']['chef-server']['url'] %>
-chef.cookbook_name = gecos_ws_mgmt
-
-firstboot_api.version = 0.2.0
-firstboot_api.organization_name = Organization name
-firstboot_api.media = %(here)s/../gecoscc/media/users
+CELERYD_CONCURRENCY = 1
 
 [pipeline:main]
 pipeline =
