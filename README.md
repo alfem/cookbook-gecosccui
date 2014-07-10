@@ -3,6 +3,8 @@ gecosccui Cookbook
 
 This is the recipe to deploy the gecoscc ui
 
+(Pointing to latest bleeding edge changes)
+
 Requirements
 ------------
 
